@@ -1,0 +1,4 @@
+venv
+ezpy.egg-info
+.idea
+**/__pycache__

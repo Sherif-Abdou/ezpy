@@ -1,0 +1,9 @@
+func main start
+    set x to 2
+    set y to 4
+    if x is less than y start
+        output "x is less than y"
+    else
+        output "y is less than x"
+    end
+end

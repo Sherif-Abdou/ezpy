@@ -13,7 +13,7 @@ class Parser():
         self.end = end
         self.scope = scope
 
-        while True:
+        while True and len(self.tokens) != 0:
             last_index = len(self.tokens)-1
             if self.tokens[last_index] != "\n":
                 break
@@ -64,12 +64,12 @@ class Parser():
     def __find_scope_command(self, start):
         if self.tokens[start] == "func":
             start_end = self.__find_scope(start)
-            function = syntax.Function(self.tokens[start+1], self.__token_subset(start_end))
+            function = syntax.Function(self.tokens[start+1], self.__token_subset(start_end), parent=self.scope)
             return function, start_end[1] + 1
         elif self.tokens[start] == "if":
             start_end = self.__find_scope(start)
             condition_tokens = self.tokens[start+1: start_end[0]-1]
-            if_condition = IfCondition(condition_tokens, self.__token_subset(start_end))
+            if_condition = IfCondition(condition_tokens, self.__token_subset(start_end), super_scope=self.scope)
             return if_condition, start_end[1] + 1
         return None
 

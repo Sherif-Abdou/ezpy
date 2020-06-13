@@ -1,16 +1,18 @@
-from src.syntax import Scope
 import src.parser as parsers
+import src.syntax as syntax
 
 
-class Function(Scope):
-    def __init__(self, literal, tokens):
-        self.literal = literal
-        self.tokens = tokens
+class Function(syntax.Scope):
+    def __init__(self, literal, tokens=[], parent=None, shouldParse=True):
         super().__init__()
-        self.__parse()
+        self.parent = parent
+        self.literal = literal
+        self.__tokens = tokens
+        if shouldParse:
+            self.__parse()
 
     def __parse(self):
-        parser = parsers.Parser(self.tokens, self)
+        parser = parsers.Parser(self.__tokens, scope=self)
         self.commands = parser.parse()
 
     def toPython(self):

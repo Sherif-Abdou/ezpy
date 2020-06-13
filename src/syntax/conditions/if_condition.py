@@ -22,9 +22,9 @@ class IfCondition(Scope):
             token = self.__body_tokens[newline + 1]
             if token == "else":
                 main_body = self.__body_tokens[0:newlines[i]]
-                main_parser = parsers.Parser(main_body)
+                main_parser = parsers.Parser(main_body, scope=self)
                 sub = self.__body_tokens[newlines[i + 1]: len(self.__body_tokens)]
-                sub_parser = parsers.Parser(main_body)
+                sub_parser = parsers.Parser(main_body, scope=self)
                 self.main_commands = main_parser.parse()
                 self.else_commands = sub_parser.parse()
                 return

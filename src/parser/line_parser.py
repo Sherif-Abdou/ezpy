@@ -16,3 +16,7 @@ class LineParser:
                 self.scope.variables.append(variable)
 
             return syntax.SetVariable(variable, self.tokens[3])
+        else:
+            literal = self.scope.findFunction(self.tokens[0])
+            command = syntax.FunctionCall(literal, self.tokens[1:len(self.tokens)])
+            return command

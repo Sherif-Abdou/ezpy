@@ -6,6 +6,14 @@ func round_five start
     print round 5.1
 end
 
+func return_five start
+    return 5
+end
+
+func double_value value start
+    return value times 2
+end
+
 func main start
     set x to 2
     set y to 4
@@ -15,4 +23,5 @@ func main start
         print "y is greater than x"
     end
     combine_values
+    print double_value 2
 end

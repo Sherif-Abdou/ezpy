@@ -17,6 +17,10 @@ class LineParser:
                 self.scope.variables.append(variable)
 
             return syntax.SetVariable(variable, self.tokens[3])
+        elif not self.inline and first == "return":
+            tokens = self.tokens[1:len(self.tokens)]
+            command = syntax.Return(tokens)
+            return command
         elif self.scope:
             literal = self.scope.findFunction(self.tokens[0])
             if literal is None:

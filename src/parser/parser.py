@@ -14,11 +14,10 @@ class Parser():
         self.scope = scope
 
         while True and len(self.tokens) != 0:
-            last_index = len(self.tokens)-1
+            last_index = len(self.tokens) - 1
             if self.tokens[last_index] != "\n":
                 break
             del self.tokens[last_index]
-
 
         if self.end is None:
             self.end = len(self.tokens)
@@ -44,7 +43,7 @@ class Parser():
         commands = []
         index = self.start
         while index < len(lines) - 1:
-            token_index = lines[index]+1
+            token_index = lines[index] + 1
             token = self.tokens[token_index]
             scope_command = self.__find_scope_command(token_index)
             if scope_command is not None:
@@ -67,12 +66,13 @@ class Parser():
     def __find_scope_command(self, start):
         if self.tokens[start] == "func":
             start_end = self.__find_scope(start)
-            function = syntax.Function(self.tokens[start+1], self.__token_subset(start_end), parent=self.scope)
+            params_tokens = self.tokens[start+2:start_end[0]-1]
+            function = syntax.Function(self.tokens[start + 1], self.__token_subset(start_end), parent=self.scope)
             self.scope.functions.append(function)
             return function, start_end[1] + 1
         elif self.tokens[start] == "if":
             start_end = self.__find_scope(start)
-            condition_tokens = self.tokens[start+1: start_end[0]-1]
+            condition_tokens = self.tokens[start + 1: start_end[0] - 1]
             if_condition = IfCondition(condition_tokens, self.__token_subset(start_end), super_scope=self.scope)
             return if_condition, start_end[1] + 1
         return None
@@ -81,8 +81,8 @@ class Parser():
         return self.tokens[start_end[0] + 1:start_end[1]]
 
     def __find_newlines(self, start, end):
-        newlines = [start-1] + [i for i, j in enumerate(self.tokens) if j == "\n"]
-        newlines = [i for i in newlines if (start-1) <= i < end] + [end]
+        newlines = [start - 1] + [i for i, j in enumerate(self.tokens) if j == "\n"]
+        newlines = [i for i in newlines if (start - 1) <= i < end] + [end]
         return newlines
 
     def __next_newline(self, newlines: List[str], index: int):

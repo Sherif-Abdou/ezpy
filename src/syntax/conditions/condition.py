@@ -26,8 +26,9 @@ class Condition:
         ConditionTypes.GREATER: ">"
     }
 
-    def __init__(self, tokens):
+    def __init__(self, tokens, scope=None):
         self.__tokens = tokens
+        self.scope = scope
         self.__parse()
 
     def __parse(self):
@@ -35,8 +36,8 @@ class Condition:
             if token == "is" and self.__tokens[i+1] in ["less", "equal", "greater"] and self.__tokens[i+2] in ["than", "to"]:
                 first_tokens = self.__tokens[0:i]
                 second_tokens = self.__tokens[i+3:len(self.__tokens)]
-                self.first_expression = Expression(first_tokens)
-                self.second_expression = Expression(second_tokens)
+                self.first_expression = Expression(first_tokens, self.scope)
+                self.second_expression = Expression(second_tokens, self.scope)
                 self.conditionType = self.conditionDict[self.__tokens[i+1]]
 
 

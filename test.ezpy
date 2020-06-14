@@ -2,6 +2,10 @@ func combine_values start
     print "combined some values"
 end
 
+func round_five start
+    print round 5.1
+end
+
 func main start
     set x to 2
     set y to 4
@@ -10,4 +14,5 @@ func main start
     else
         print "y is greater than x"
     end
+    combine_values
 end

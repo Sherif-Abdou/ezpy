@@ -2,7 +2,7 @@ import re
 
 
 class Tokenizer:
-    __words = r"([\w]+(?=(\n)|\s|($)|.|,)|[\.|,]|(\".*\")|(\n))"
+    __words = r"([a-zA-Z_]+(?=(\n)|\s|($)|.|,)|\d+\.?\d*|(?<=[a-zA-Z_])\.(?=[a-zA-Z_])|,|(\".*\")|(\n))"
 
     def __init__(self, raw_text: str):
         self.raw_text = raw_text

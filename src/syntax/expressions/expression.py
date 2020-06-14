@@ -1,4 +1,5 @@
 from enum import Enum
+import src.parser as parsers
 
 
 class ExpressionTypes(Enum):
@@ -8,6 +9,7 @@ class ExpressionTypes(Enum):
     MULTIPLICATION = 3
     DIVISION = 4
     MODULO = 5
+    COMMAND = 6
 
 
 class Expression:
@@ -26,8 +28,10 @@ class Expression:
         ExpressionTypes.DIVISION: "/",
         ExpressionTypes.MODULO: "%"
     }
-    def __init__(self, tokens):
+
+    def __init__(self, tokens, scope=None):
         self.__tokens = tokens
+        self.scope = scope
         self.__parse()
 
     def __parse(self):
@@ -35,11 +39,16 @@ class Expression:
             if token in self.expressionDict:
                 self.type = self.expressionDict[token]
                 self.a = Expression(self.__tokens[0:i])
-                self.b = Expression(self.__tokens[i+1:len(self.__tokens)])
+                self.b = Expression(self.__tokens[i + 1:len(self.__tokens)])
                 return
 
-        self.type = ExpressionTypes.VALUE
-        self.a = self.__tokens[0]
+        possible_command = parsers.LineParser(self.__tokens, self.scope, True)
+        if possible_command.parse() is not None:
+            self.a = possible_command.parse()
+            self.type = ExpressionTypes.COMMAND
+        else:
+            self.type = ExpressionTypes.VALUE
+            self.a = self.__tokens[0]
         self.b = None
 
     def usesSingleValue(self):
@@ -49,5 +58,7 @@ class Expression:
         if self.usesSingleValue():
             if self.type == ExpressionTypes.VALUE:
                 return str(self.a)
+            elif self.type == ExpressionTypes.COMMAND:
+                return self.a.toPython()
         else:
             return f"({self.a.toPython()}){self.__expressionMap[self.type]}({self.b.toPython()})"

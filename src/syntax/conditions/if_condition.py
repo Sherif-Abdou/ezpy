@@ -12,7 +12,7 @@ class IfCondition(Scope):
         self.__body_tokens = body_tokens
         if self.__body_tokens[len(self.__body_tokens) - 1] == "\n":
             del self.__body_tokens[len(self.__body_tokens) - 1]
-        self.condition = Condition(self.__condition_tokens)
+        self.condition = Condition(self.__condition_tokens, self.parent)
         self.__parse()
 
     def __parse(self):

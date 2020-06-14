@@ -2,18 +2,22 @@ import src.syntax.expressions as expressions
 
 
 class FunctionCall:
-    def __init__(self, function, params):
+    def __init__(self, function, params, scope=None):
         self.function = function
         self.params = params
+        self.scope = scope
         self.__parse()
 
     def __parse(self):
+        if not self.params:
+            self.params = []
+            return
         commas = self.__find_commas()
         if not commas:
-            self.params = [expressions.Expression(self.params)]
+            self.params = [expressions.Expression(self.params, self.scope)]
         else:
             split_params = self.__split_commas(commas)
-            parsed_params = [expressions.Expression(tokens) for tokens in split_params]
+            parsed_params = [expressions.Expression(tokens, self.scope) for tokens in split_params]
             self.params = parsed_params
 
     def __split_commas(self, commas):

@@ -1,5 +1,6 @@
 venv
 ezpy.egg-info
 .idea
+./test/
 **/__pycache__
 output_file.py

@@ -10,7 +10,6 @@ class Tokenizer:
     def tokenize(self):
         stripped_text = re.findall(self.__words, self.raw_text)
         stripped_text = self.__merge_capture_groups(stripped_text)
-        print(stripped_text)
         return stripped_text
 
     def __merge_capture_groups(self, stripped_text):

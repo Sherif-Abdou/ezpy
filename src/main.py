@@ -9,7 +9,7 @@ import src
 
 if __name__ == "__main__":
     input_file = sys.argv[1]
-    full_input_path = path.normpath(path.join(getcwd(), input_file))
+    full_input_path = path.abspath(input_file)
 
     with open(full_input_path, "r") as file:
         text = file.read()
@@ -22,8 +22,8 @@ if __name__ == "__main__":
     parser = Parser(tokens, scope=root_scope)
     tree = parser.parse()
 
-    print(tree)
     python = src.create_python(tree)
-    print(python)
-    with open("../output_file.py", "w") as file:
+
+    full_output_path = path.join(path.dirname(full_input_path), path.splitext(full_input_path)[0] + ".py")
+    with open(full_output_path, "w") as file:
         file.write(python)

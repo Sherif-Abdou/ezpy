@@ -29,18 +29,27 @@ class Expression:
         ExpressionTypes.MODULO: "%"
     }
 
+    __expressionWeights = [
+        ExpressionTypes.ADDITION,
+        ExpressionTypes.SUBTRACTION,
+        ExpressionTypes.MODULO,
+        ExpressionTypes.DIVISION,
+        ExpressionTypes.MULTIPLICATION
+    ]
+
     def __init__(self, tokens, scope=None):
         self.__tokens = tokens
         self.scope = scope
         self.__parse()
 
     def __parse(self):
-        for i, token in enumerate(self.__tokens):
-            if token in self.expressionDict:
-                self.type = self.expressionDict[token]
-                self.a = Expression(self.__tokens[0:i])
-                self.b = Expression(self.__tokens[i + 1:len(self.__tokens)])
-                return
+        for weight in self.__expressionWeights:
+            for i, token in enumerate(self.__tokens):
+                if token in self.expressionDict and self.expressionDict[token] == weight:
+                    self.type = self.expressionDict[token]
+                    self.a = Expression(self.__tokens[0:i])
+                    self.b = Expression(self.__tokens[i + 1:len(self.__tokens)])
+                    return
 
         possible_command = parsers.LineParser(self.__tokens, self.scope, True)
         if possible_command.parse() is not None:

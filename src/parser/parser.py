@@ -67,7 +67,7 @@ class Parser():
         if self.tokens[start] == "func":
             start_end = self.__find_scope(start)
             params_tokens = self.tokens[start+2:start_end[0]-1]
-            function = syntax.Function(self.tokens[start + 1], self.__token_subset(start_end), parent=self.scope)
+            function = syntax.Function(self.tokens[start + 1], self.__token_subset(start_end), param_tokens=params_tokens, parent=self.scope)
             self.scope.functions.append(function)
             return function, start_end[1] + 1
         elif self.tokens[start] == "if":

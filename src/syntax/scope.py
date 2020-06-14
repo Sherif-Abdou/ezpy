@@ -26,3 +26,12 @@ class Scope:
                 return function
 
         return None
+
+    def parentCount(self):
+        i = 1
+        parent = self.parent
+        if parent:
+            i+=1
+            parent = parent.parent
+
+        return i

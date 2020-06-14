@@ -36,3 +36,13 @@ class IfCondition(Scope):
         newlines = [start - 1] + [i for i, j in enumerate(self.__body_tokens) if j == "\n"]
         newlines = [i for i in newlines if (start - 1) <= i < end]
         return newlines
+
+    def toPython(self):
+        tab = "    "
+        newline = f"\n{tab*self.parentCount()}"
+        else_newline = f"\n{tab*(self.parentCount()-1)}"
+        string = f"""if {self.condition.toPython()}:{newline}{newline.join([command.toPython() for command in self.main_commands])}"""
+        if self.else_commands is not None:
+            elseString = f"""{else_newline}else:{newline}{newline.join([command.toPython() for command in self.main_commands])}"""
+            string += elseString
+        return string

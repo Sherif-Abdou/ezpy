@@ -20,6 +20,12 @@ class Condition:
         "greater": ConditionTypes.GREATER
     }
 
+    __conditionMap = {
+        ConditionTypes.LESSER: "<",
+        ConditionTypes.EQUAL: "==",
+        ConditionTypes.GREATER: ">"
+    }
+
     def __init__(self, tokens):
         self.__tokens = tokens
         self.__parse()
@@ -36,3 +42,7 @@ class Condition:
 
     def usesSingleValue(self):
         return self.second_expression is None
+
+    def toPython(self):
+        if not self.usesSingleValue():
+            return f"({self.first_expression.toPython()}){self.__conditionMap[self.conditionType]}({self.second_expression.toPython()})"

@@ -19,3 +19,5 @@ class Function(syntax.Scope):
         newline = "\n    "
         if self.literal == "main":
             return f"""if __name__ == "__main__":{newline}{newline.join([command.toPython() for command in self.commands])}"""
+        else:
+            return f"""def {self.literal}():{newline}{newline.join([command.toPython() for command in self.commands])}"""

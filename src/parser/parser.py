@@ -54,6 +54,9 @@ class Parser():
             else:
                 start = lines[index] + 1
                 end = lines[index + 1]
+                if not self.tokens[start:end]:
+                    index += 1
+                    continue
                 line_parser = LineParser(self.tokens[start:end], self.scope)
                 commands.append(line_parser.parse())
 

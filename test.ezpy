@@ -1,3 +1,7 @@
+func combine_values start
+    print "combined some values"
+end
+
 func main start
     set x to 2
     set y to 4

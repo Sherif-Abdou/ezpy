@@ -5,6 +5,7 @@ import src.Tokenizer
 import src.builtin as builtin
 from src.parser import Parser
 import src.syntax as syntax
+import src
 
 if __name__ == "__main__":
     input_file = sys.argv[1]
@@ -22,5 +23,7 @@ if __name__ == "__main__":
     tree = parser.parse()
 
     print(tree)
-    # with open("../output_file.py", "w") as file:
-    #     file.write(outputter.createPython())
+    python = src.create_python(tree)
+    print(python)
+    with open("../output_file.py", "w") as file:
+        file.write(python)

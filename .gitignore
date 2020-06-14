@@ -2,3 +2,4 @@ venv
 ezpy.egg-info
 .idea
 **/__pycache__
+output_file.py

@@ -1,16 +1,15 @@
 from enum import Enum
-
 from src.syntax.expressions import Expression
 
 
 class ConditionTypes(Enum):
-    ISTRUE=0
-    ISFALSE=1
-    GREATER=2
-    LESSER=3
-    GREATEROREQUAL=4
-    LESSEROREQUAL=5
-    EQUAL=6
+    ISTRUE = 0
+    ISFALSE = 1
+    GREATER = 2
+    LESSER = 3
+    GREATEROREQUAL = 4
+    LESSEROREQUAL = 5
+    EQUAL = 6
 
 
 class Condition:
@@ -32,14 +31,16 @@ class Condition:
         self.__parse()
 
     def __parse(self):
+        # Looks for condition keywords
         for i, token in enumerate(self.__tokens):
-            if token == "is" and self.__tokens[i+1] in ["less", "equal", "greater"] and self.__tokens[i+2] in ["than", "to"]:
+            if token == "is" and self.__tokens[i + 1] in ["less", "equal", "greater"] and self.__tokens[i + 2] in [
+                "than", "to"]:
+                # Parses expressions before and after the condition keywords
                 first_tokens = self.__tokens[0:i]
-                second_tokens = self.__tokens[i+3:len(self.__tokens)]
+                second_tokens = self.__tokens[i + 3:len(self.__tokens)]
                 self.first_expression = Expression(first_tokens, self.scope)
                 self.second_expression = Expression(second_tokens, self.scope)
-                self.conditionType = self.conditionDict[self.__tokens[i+1]]
-
+                self.conditionType = self.conditionDict[self.__tokens[i + 1]]
 
     def usesSingleValue(self):
         return self.second_expression is None

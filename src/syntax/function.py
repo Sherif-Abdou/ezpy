@@ -2,6 +2,7 @@ import src.parser as parsers
 import src.syntax as syntax
 
 
+# Represents a function
 class Function(syntax.Scope):
     def __init__(self, literal, tokens=[], param_tokens=[], parent=None, shouldParse=True):
         super().__init__()
@@ -18,31 +19,36 @@ class Function(syntax.Scope):
         parser = parsers.Parser(self.__tokens, scope=self)
         self.commands = parser.parse()
 
+    # Parses function parameters
     def __param_parse(self):
         if not self.__param_tokens:
             return
 
         commas = self.__find_commas()
         if not commas:
+            # Group all the tokens as one parameter if there's no commas
             variable = syntax.Variable(self.__param_tokens[0], None)
             self.params.append(variable)
             self.variables.append(variable)
         else:
+            # Splits the tokens around the commas and parses each parameter
             split_commas = self.__split_commas(commas)
             for literal in split_commas:
-                self.params.append(variable)
                 variable = syntax.Variable(literal[0], None)
+                self.params.append(variable)
                 self.variables.append(variable)
 
-
+    # Splits parameter tokens based on commas
     def __split_commas(self, commas):
         split_params = []
         prevComma = -1
         for comma in commas:
             split_params.append(self.__param_tokens[prevComma + 1:comma])
             prevComma = comma
+        split_params.append(self.__param_tokens[prevComma + 1:len(self.__param_tokens)])
         return split_params
 
+    # Finds all comma tokens in the parameter tokens
     def __find_commas(self):
         commas = []
         for i, token in enumerate(self.__param_tokens):

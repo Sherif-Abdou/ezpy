@@ -1,6 +1,7 @@
 import src.syntax.expressions as expressions
 
 
+# Represents a function return
 class Return:
     def __init__(self, tokens):
         self.__tokens = tokens

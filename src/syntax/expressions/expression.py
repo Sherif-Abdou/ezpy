@@ -2,6 +2,7 @@ from enum import Enum
 import src.parser as parsers
 
 
+# Types of expressions
 class ExpressionTypes(Enum):
     VALUE = 0
     ADDITION = 1
@@ -12,6 +13,7 @@ class ExpressionTypes(Enum):
     COMMAND = 6
 
 
+# Represents an expression(+,-,*,/,%, commands, or just values)
 class Expression:
     expressionDict = {
         "plus": ExpressionTypes.ADDITION,
@@ -43,6 +45,7 @@ class Expression:
         self.__parse()
 
     def __parse(self):
+        # Checks the expression for operators(in the order of operations)
         for weight in self.__expressionWeights:
             for i, token in enumerate(self.__tokens):
                 if token in self.expressionDict and self.expressionDict[token] == weight:
@@ -51,11 +54,13 @@ class Expression:
                     self.b = Expression(self.__tokens[i + 1:len(self.__tokens)])
                     return
 
+        # Checks if expression is an inline command(ex. function call)
         possible_command = parsers.LineParser(self.__tokens, self.scope, True)
         if possible_command.parse() is not None:
             self.a = possible_command.parse()
             self.type = ExpressionTypes.COMMAND
         else:
+            # If nothing else, assumes it's a value
             self.type = ExpressionTypes.VALUE
             self.a = self.__tokens[0]
         self.b = None

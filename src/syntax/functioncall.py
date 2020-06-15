@@ -26,6 +26,7 @@ class FunctionCall:
         for comma in commas:
             split_params.append(self.params[prevComma + 1:comma])
             prevComma = comma
+        split_params.append(self.params[prevComma+1:len(self.params)])
         return split_params
 
     def __find_commas(self):

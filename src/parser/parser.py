@@ -13,6 +13,7 @@ class Parser():
         self.end = end
         self.scope = scope
 
+        # Removes any trailing whitespace
         while True and len(self.tokens) != 0:
             last_index = len(self.tokens) - 1
             if self.tokens[last_index] != "\n":
@@ -22,9 +23,12 @@ class Parser():
         if self.end is None:
             self.end = len(self.tokens)
 
+    # Finds the tokens of a start-end scope
     def __find_scope(self, start_token):
         first_start = self.tokens.index("start", start_token) + 1
         index = first_start
+
+        # uses i to represent sub scopes and to not count them
         i = 0
         while index < len(self.tokens):
             if self.tokens[index] == "end":
@@ -43,19 +47,22 @@ class Parser():
         commands = []
         index = self.start
         while index < len(lines) - 1:
+            # Sees if a token represents a scope command
             token_index = lines[index] + 1
-            token = self.tokens[token_index]
             scope_command = self.__find_scope_command(token_index)
             if scope_command is not None:
+                # Adds scoped command to commands and moves index to after the parsed scope
                 index = self.__next_newline(lines, scope_command[1])
                 commands.append(scope_command[0])
                 continue
             else:
+                # Gets a subarray of the line's tokens
                 start = lines[index] + 1
                 end = lines[index + 1]
                 if not self.tokens[start:end]:
                     index += 1
                     continue
+                # Inputs the subarray to LineParser for further parsing
                 line_parser = LineParser(self.tokens[start:end], self.scope)
                 commands.append(line_parser.parse())
 
@@ -63,6 +70,7 @@ class Parser():
 
         return commands
 
+    # Checks for any commands that create a new scope(ex functions, if statements)
     def __find_scope_command(self, start):
         if self.tokens[start] == "func":
             start_end = self.__find_scope(start)
@@ -77,14 +85,17 @@ class Parser():
             return if_condition, start_end[1] + 1
         return None
 
+    # Turns a start-end tuple to a subarray
     def __token_subset(self, start_end):
         return self.tokens[start_end[0] + 1:start_end[1]]
 
+    # Look for all newlines(\n) in the token array
     def __find_newlines(self, start, end):
         newlines = [start - 1] + [i for i, j in enumerate(self.tokens) if j == "\n"]
         newlines = [i for i in newlines if (start - 1) <= i < end] + [end]
         return newlines
 
+    # Finds the next newline starting at an token index
     def __next_newline(self, newlines: List[str], index: int):
         for i, newline in enumerate(newlines):
             if newline >= index:

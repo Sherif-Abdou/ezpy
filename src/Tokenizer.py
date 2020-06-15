@@ -12,6 +12,7 @@ class Tokenizer:
         stripped_text = self.__merge_capture_groups(stripped_text)
         return stripped_text
 
+    # Flattens the multiple capture groups in the regex search
     def __merge_capture_groups(self, stripped_text):
         flattened = []
         for group in stripped_text:
